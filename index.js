@@ -39,10 +39,6 @@ let persons = [
     }
 ]
 
-app.get('/', function (req, res) {
-  res.send('hello, world!')
-})
-
 app.get('/info', (request, response) => {
   response.send(`<p>Phonebook has info for ${persons.length} people</p> ${new Date()}`)
 })
