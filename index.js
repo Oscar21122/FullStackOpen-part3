@@ -21,12 +21,12 @@ require('dotenv').config()
 
 mongoose.set('strictQuery',false)
 
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI
 
-console.log('connecting to', url);
+console.log('connecting to', url)
 
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch(error => {
@@ -61,28 +61,28 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const { number } = request.body; 
+  const { number } = request.body
 
   Person.findByIdAndUpdate(
     request.params.id,
     { number },
-    { new: true, runValidators: true, context: 'query' } 
+    { new: true, runValidators: true, context: 'query' }
   )
     .then(updatedPerson => {
       if (!updatedPerson) {
-        return response.status(404).json({ error: 'Person not found' });
+        return response.status(404).json({ error: 'Person not found' })
       }
-      response.json(updatedPerson); 
+      response.json(updatedPerson)
     })
-    .catch(error => next(error));
-});
+    .catch(error => next(error))
+})
 
 
 const alreadyNane = async (name) => {
@@ -91,14 +91,14 @@ const alreadyNane = async (name) => {
 }
 
 app.post('/api/persons', async (request, response, next) => {
-  const {name , number} = request.body
+  const { name , number } = request.body
 
   if (!name) {
     return response.status(400).json({ error: 'name missing' })
-  } 
+  }
   if (!number) {
     return response.status(400).json({ error: 'number missing' })
-  } 
+  }
   if (await alreadyNane(name)) {
     return response.status(400).json({ error: 'name must be unique' })
   }
@@ -124,7 +124,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT 
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
